@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\NGO_PJsem3.props" />
+</Project>
