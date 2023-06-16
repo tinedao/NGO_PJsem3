@@ -12,7 +12,7 @@ using NGO_PJsem3.Data;
 namespace NGO_PJsem3.Migrations
 {
     [DbContext(typeof(NgoDbContext))]
-    [Migration("20230615202034_CreateTableNGO")]
+    [Migration("20230616131520_CreateTableNGO")]
     partial class CreateTableNGO
     {
         /// <inheritdoc />
@@ -200,6 +200,13 @@ namespace NGO_PJsem3.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("imgUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("role")
+                        .HasColumnType("bit");
 
                     b.HasKey("UserId");
 

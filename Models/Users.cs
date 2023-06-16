@@ -1,6 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
+
 
 namespace NGO_PJsem3.Models
 {
@@ -16,6 +21,7 @@ namespace NGO_PJsem3.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public bool role { get; set; }
         public string imgUser { get; set; }
 
         [Required]
