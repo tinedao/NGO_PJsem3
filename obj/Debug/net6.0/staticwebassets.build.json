@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BZs6lS3CY982EMOIy3d5zeb7FfNCRBEzyN9bVTGWRaM=",
+  "Hash": "FjU9sAwgxntTCdoaXKVMmpeb8azbd0ljYPS75kCchk8=",
   "Source": "NGO_PJsem3",
   "BasePath": "_content/NGO_PJsem3",
   "Mode": "Default",
@@ -16,40 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\bundle\\NGO_PJsem3.styles.css",
-      "SourceId": "NGO_PJsem3",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\bundle\\",
-      "BasePath": "_content/NGO_PJsem3",
-      "RelativePath": "NGO_PJsem3.styles.css",
-      "AssetKind": "All",
-      "AssetMode": "CurrentProject",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ApplicationBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\bundle\\NGO_PJsem3.styles.css"
-    },
-    {
-      "Identity": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\NGO_PJsem3.bundle.scp.css",
-      "SourceId": "NGO_PJsem3",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\",
-      "BasePath": "_content/NGO_PJsem3",
-      "RelativePath": "NGO_PJsem3.bundle.scp.css",
-      "AssetKind": "All",
-      "AssetMode": "Reference",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ProjectBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\NGO_PJsem3.bundle.scp.css"
-    },
     {
       "Identity": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\wwwroot\\css\\site.css",
       "SourceId": "NGO_PJsem3",

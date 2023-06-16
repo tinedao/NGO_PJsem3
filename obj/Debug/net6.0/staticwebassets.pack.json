@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\NGO_PJsem3.bundle.scp.css",
-      "PackagePath": "staticwebassets\\NGO_PJsem3.bundle.scp.css"
-    },
-    {
       "Id": "C:\\Users\\tined\\source\\repos\\NGO_PJsem3\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

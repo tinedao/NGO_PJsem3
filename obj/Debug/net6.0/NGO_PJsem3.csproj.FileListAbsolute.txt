@@ -205,8 +205,6 @@ C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.AssemblyInfoI
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.AssemblyInfo.cs
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.csproj.CoreCompileInputs.cache
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.RazorAssemblyInfo.cache
-C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.RazorAssemblyInfo.cs
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets\msbuild.NGO_PJsem3.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets\msbuild.build.NGO_PJsem3.props
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.NGO_PJsem3.props
@@ -214,9 +212,7 @@ C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets\msbuild.
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets.pack.json
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets.build.json
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\staticwebassets.development.json
-C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\scopedcss\bundle\NGO_PJsem3.styles.css
-C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\scopedcss\projectbundle\NGO_PJsem3.bundle.scp.css
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.csproj.CopyComplete
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\NGO_PJsem3.dll
 C:\Users\tined\source\repos\NGO_PJsem3\obj\Debug\net6.0\refint\NGO_PJsem3.dll

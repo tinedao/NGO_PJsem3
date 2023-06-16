@@ -16,13 +16,18 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
     {
         [HttpPost]
         [Route("CreateUser")]
-        public async Task CreateUser(string username, string password)
+        public async Task<ActionResult> CreateUser(string username, string password, string imgUser, string email, string fullName, string address, string phoneNumber)
         {
             // Tạo đối tượng User với thông tin người dùng
             var user = new Users
             {
                 Username = username,
-                Password = HashPassword(password)
+                Password = HashPassword(password),
+                imgUser = imgUser,
+                Email = email,
+                FullName = fullName,
+                Address = address,
+                PhoneNumber = phoneNumber
             };
 
             // Chuyển đối tượng User thành JSON
@@ -40,15 +45,17 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     // Người dùng đã được tạo thành công
-                    Console.WriteLine("User created successfully");
+                    return Ok("User created successfully");
                 }
                 else
                 {
                     // Có lỗi xảy ra trong quá trình tạo người dùng
-                    Console.WriteLine("Failed to create user");
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest(errorMessage);
                 }
             }
         }
+
 
         private string HashPassword(string password)
         {
