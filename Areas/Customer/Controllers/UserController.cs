@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NGO_PJsem3.Models;
 using System.Security.Cryptography;
@@ -7,12 +8,14 @@ using System.Text;
 
 namespace NGO_PJsem3.Areas.Customer.Controllers
 {
+    [EnableCors("AllowAllOrigins")]
     [Route("NGO/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class UserController : ControllerBase
     {
         [HttpPost]
-        [Route("")]
+        [Route("CreateUser")]
         public async Task CreateUser(string username, string password)
         {
             // Tạo đối tượng User với thông tin người dùng
@@ -31,7 +34,7 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
                 var httpContent = new StringContent(jsonUser, Encoding.UTF8, "application/json");
 
                 // Gửi yêu cầu POST tới API
-                var response = await httpClient.PostAsync("https://your-api-url.com/create-user", httpContent);
+                var response = await httpClient.PostAsync("https://localhost:7296/NGO/User/CreateUser", httpContent);
 
                 // Kiểm tra phản hồi từ API
                 if (response.IsSuccessStatusCode)
