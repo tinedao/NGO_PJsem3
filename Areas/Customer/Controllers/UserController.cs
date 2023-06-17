@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NGO_PJsem3.Models;
-using System.Security.Cryptography;
 using System.Text;
-
+using System.Text.RegularExpressions;
 
 namespace NGO_PJsem3.Areas.Customer.Controllers
 {
@@ -17,110 +16,172 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IPasswordHasher<Users> _passwordHasher;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IPasswordHasher<Users> passwordHasher)
-        {
-            _passwordHasher = passwordHasher;
-        }
-
-        public UserController(IHttpClientFactory httpClientFactory, IPasswordHasher<Users> passwordHasher)
+        public UserController(IHttpClientFactory httpClientFactory, IPasswordHasher<Users> passwordHasher, ILogger<UserController> logger)
         {
             _httpClient = httpClientFactory.CreateClient();
             _passwordHasher = passwordHasher;
+            _logger = logger;
         }
 
         [HttpGet("checkExistence")]
         public async Task<IActionResult> CheckExistence(string email, string phoneNumber)
         {
-            // Kiểm tra sự tồn tại của email và số điện thoại
-            bool isEmailExists = await CheckEmailExistence(email);
-            bool isPhoneNumberExists = await CheckPhoneNumberExistence(phoneNumber);
+            try
+            {
+                // Kiểm tra sự tồn tại của email và số điện thoại
+                bool isEmailExists = await CheckEmailExistence(email);
+                bool isPhoneNumberExists = await CheckPhoneNumberExistence(phoneNumber);
 
-            return Ok(new { EmailExists = isEmailExists, PhoneNumberExists = isPhoneNumberExists });
+                return Ok(new { EmailExists = isEmailExists, PhoneNumberExists = isPhoneNumberExists });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking existence.");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         private async Task<bool> CheckEmailExistence(string email)
         {
-            // Gửi yêu cầu kiểm tra sự tồn tại của email đến API
-            var response = await _httpClient.GetAsync($"https://localhost:7296/NGO/Validation/CheckEmailExistence?email={email}");
-
-            if (!response.IsSuccessStatusCode)
+            if (!IsValidEmail(email))
             {
-                // Xử lý lỗi khi kiểm tra email tồn tại
                 return false;
             }
 
-            var result = await response.Content.ReadAsStringAsync();
-            return bool.Parse(result);
+            try
+            {
+                // Gửi yêu cầu kiểm tra sự tồn tại của email đến API
+                var response = await _httpClient.GetAsync($"https://localhost:7296/NGO/Validation/CheckEmailExistence?email={email}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Xử lý lỗi khi kiểm tra email tồn tại
+                    return false;
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+                return bool.Parse(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking email existence.");
+                return false;
+            }
         }
 
         private async Task<bool> CheckPhoneNumberExistence(string phoneNumber)
         {
-            // Gửi yêu cầu kiểm tra sự tồn tại của số điện thoại đến API
-            var response = await _httpClient.GetAsync($"https://localhost:7296/NGO/Validation/CheckPhoneNumberExistence?phoneNumber={phoneNumber}");
-
-            if (!response.IsSuccessStatusCode)
+            if (!IsValidPhoneNumber(phoneNumber))
             {
-                // Xử lý lỗi khi kiểm tra số điện thoại tồn tại
                 return false;
             }
 
-            var result = await response.Content.ReadAsStringAsync();
-            return bool.Parse(result);
+            try
+            {
+                // Gửi yêu cầu kiểm tra sự tồn tại của số điện thoại đến API
+                var response = await _httpClient.GetAsync($"https://localhost:7296/NGO/Validation/CheckPhoneNumberExistence?phoneNumber={phoneNumber}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Xử lý lỗi khi kiểm tra số điện thoại tồn tại
+                    return false;
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+                return bool.Parse(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking phone number existence.");
+                return false;
+            }
         }
 
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser(string username, string password, string imgUser, string email, string fullName, string address, string phoneNumber)
         {
-            // Kiểm tra validate trước khi thêm người dùng mới
-            bool isEmailExists = await CheckEmailExistence(email);
-            bool isPhoneNumberExists = await CheckPhoneNumberExistence(phoneNumber);
-
-            // Kiểm tra xem email và số điện thoại đã tồn tại hay chưa
-            if (isEmailExists)
+            try
             {
-                return BadRequest("Email already exists");
+                // Kiểm tra validate trước khi thêm người dùng mới
+                bool isEmailExists = await CheckEmailExistence(email);
+                bool isPhoneNumberExists = await CheckPhoneNumberExistence(phoneNumber);
+
+                // Kiểm tra xem email và số điện thoại đã tồn tại hay chưa
+                if (isEmailExists)
+                {
+                    return BadRequest("Email already exists");
+                }
+
+                if (isPhoneNumberExists)
+                {
+                    return BadRequest("Phone number already exists");
+                }
+
+                // Tiếp tục xử lý thêm người dùng mới
+                var user = new Users
+                {
+                    Username = username,
+                    Password = HashPassword(password),
+                    imgUser = imgUser,
+                    Email = email,
+                    FullName = fullName,
+                    Address = address,
+                    PhoneNumber = phoneNumber
+                };
+
+                // Gửi yêu cầu thêm người dùng mới đến API
+                var jsonUser = JsonConvert.SerializeObject(user);
+                var httpContent = new StringContent(jsonUser, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("https://localhost:7296/NGO/User/CreateUser", httpContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("User created successfully");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest(errorMessage);
+                }
             }
-
-            if (isPhoneNumberExists)
+            catch (Exception ex)
             {
-                return BadRequest("Phone number already exists");
-            }
-
-            // Tiếp tục xử lý thêm người dùng mới
-            var user = new Users
-            {
-                Username = username,
-                Password = HashPassword(password),
-                imgUser = imgUser,
-                Email = email,
-                FullName = fullName,
-                Address = address,
-                PhoneNumber = phoneNumber
-            };
-
-            // Gửi yêu cầu thêm người dùng mới đến API
-            var jsonUser = JsonConvert.SerializeObject(user);
-            var httpContent = new StringContent(jsonUser, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://localhost:7296/NGO/User/CreateUser", httpContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok("User created successfully");
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                return BadRequest(errorMessage);
+                _logger.LogError(ex, "An error occurred while creating user.");
+                return StatusCode(500, "Internal server error");
             }
         }
 
         private string HashPassword(string password)
         {
-            // Mã hóa mật khẩu sử dụng bcrypt
-            var passwordHash = _passwordHasher.HashPassword(null, password);
-            return passwordHash;
+            try
+            {
+                // Mã hóa mật khẩu sử dụng bcrypt
+                var passwordHash = _passwordHasher.HashPassword(null, password);
+                return passwordHash;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while hashing password.");
+                return null;
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            // Kiểm tra định dạng email bằng regex
+            const string emailRegexPattern = @"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$";
+            var regex = new Regex(emailRegexPattern);
+            return regex.IsMatch(email);
+        }
+
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            // Kiểm tra định dạng số điện thoại bằng regex
+            const string phoneNumberRegexPattern = @"^(0[0-9]{9})$";
+            var regex = new Regex(phoneNumberRegexPattern);
+            return regex.IsMatch(phoneNumber);
         }
     }
-
 }
