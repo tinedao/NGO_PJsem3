@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NGO_PJsem3.Models;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,6 +18,49 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
         private readonly HttpClient _httpClient;
         private readonly IPasswordHasher<Users> _passwordHasher;
         private readonly ILogger<UserController> _logger;
+
+        //login
+        [HttpPost("Login")]
+        public async Task<ActionResult> Login(string username, string password)
+        {
+            try
+            {
+                // Gửi yêu cầu đăng nhập đến API
+                var loginRequest = new
+                {
+                    Username = username,
+                    Password = password
+                };
+
+                var jsonRequest = JsonConvert.SerializeObject(loginRequest);
+                var httpContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("https://localhost:7296/NGO/User/Login", httpContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var user = JsonConvert.DeserializeObject<Users>(result);
+                    
+
+                    return Ok("Login successful");
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Unauthorized("Invalid username or password");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while logging in.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
         public UserController(IHttpClientFactory httpClientFactory, IPasswordHasher<Users> passwordHasher, ILogger<UserController> logger)
         {
@@ -98,7 +142,6 @@ namespace NGO_PJsem3.Areas.Customer.Controllers
                 return false;
             }
         }
-
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser(string username, string password, string imgUser, string email, string fullName, string address, string phoneNumber)
         {
